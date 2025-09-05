@@ -73,6 +73,12 @@ function App() {
         ) : (
           <>
             {/* Results Display */}
+            <img
+  src={results[resultKey].image}
+  alt={results[resultKey].title}
+  className="w-24 h-24 mb-4"
+/>
+
             <div className="flex flex-col items-center">
               {/* Optional image: <img src={results[resultKey].image} alt={results[resultKey].title} className="w-24 h-24 mb-4" /> */}
               <div className="mb-2 text-3xl font-bold text-blue-700">{results[resultKey].title}</div>
