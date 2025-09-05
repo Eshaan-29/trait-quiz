@@ -43,32 +43,25 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-pink-100 via-indigo-100 to-cyan-100 flex items-center justify-center p-4">
-      <div className="bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl p-8 max-w-md w-full flex flex-col gap-6 border border-indigo-100">
-        <h1 className="font-extrabold text-3xl text-center mb-2 text-indigo-800 tracking-tight drop-shadow">
+      <div className="card max-w-lg w-full mx-auto">
+        <h1 className="font-extrabold text-3xl text-center mb-4 text-indigo-800 tracking-tight drop-shadow">
           ✨ Trait Analyzer ✨
         </h1>
-        <p className="text-center text-gray-500 mb-2">Discover your core energy style.</p>
-
+        <p className="text-center text-gray-500 mb-5 text-base">Discover your core energy style.</p>
         {/* Progress Bar */}
-        <div className="w-full h-3 rounded-full bg-gray-200 overflow-hidden mb-2">
-          <div
-            className="h-full bg-gradient-to-r from-indigo-400 via-pink-400 to-cyan-400 shadow-inner transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="progress mb-8">
+          <div className="bar" style={{ width: `${progress}%` }} />
         </div>
 
         {!showResult ? (
           <>
-            {/* Current Question */}
-            <div className="rounded-xl bg-indigo-50/70 p-4 shadow-inner">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-                {questions[step].question}
-              </h2>
-              <div className="flex flex-col gap-4">
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
+              <div className="choices w-full">
                 {questions[step].options.map((opt) => (
                   <button
                     key={opt.text}
-                    className="w-full py-3 rounded-xl bg-white ring-2 ring-indigo-300/40 hover:bg-gradient-to-r hover:from-pink-100 hover:to-indigo-100 hover:ring-indigo-400 text-indigo-900 font-semibold shadow-md transition transform hover:scale-105 text-base"
+                    className="choice w-full button text-base font-semibold"
                     onClick={() => handleAnswer(opt.type)}
                   >
                     {opt.text}
@@ -76,7 +69,7 @@ function App() {
                 ))}
               </div>
             </div>
-            <div className="mt-2 text-gray-400 text-xs text-center tracking-widest">
+            <div className="mt-6 muted small text-center">
               Question {step + 1} of {questions.length}
             </div>
           </>
@@ -96,7 +89,7 @@ function App() {
               <p className="text-center text-lg text-indigo-800 mb-2">{results[resultKey].message}</p>
               <button
                 onClick={handleShare}
-                className="bg-gradient-to-tr from-pink-400 via-indigo-400 to-cyan-400 text-white font-semibold py-2 px-7 my-2 rounded-full shadow-lg hover:scale-105 transition-all"
+                className="button secondary my-2"
               >
                 🚀 Share Your Result
               </button>
@@ -115,7 +108,7 @@ function App() {
               </a>
               <button
                 onClick={() => window.location.reload()}
-                className="text-sm text-gray-600 underline hover:text-indigo-700 transition"
+                className="button ghost small"
               >
                 🔁 Retake Quiz
               </button>
