@@ -57,11 +57,11 @@ function App() {
           <>
             <div className="mb-4">
               <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
-              <div className="choices w-full">
+              <div className="choices w-full flex flex-col gap-4">
                 {questions[step].options.map((opt) => (
                   <button
                     key={opt.text}
-                    className="choice w-full button text-base font-semibold"
+                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow transition"
                     onClick={() => handleAnswer(opt.type)}
                   >
                     {opt.text}
