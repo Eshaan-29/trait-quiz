@@ -1,3 +1,4 @@
+import './App.css';
 import React, { useState } from "react";
 import { questions } from "./questions";
 import { results } from "./results";
