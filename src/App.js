@@ -18,7 +18,6 @@ function App() {
 
     setScores((prev) => {
       let nextScores = { ...prev };
-      // Remove prev score if changed
       if (prevType && prevType !== type) nextScores[prevType]--;
       nextScores[type]++;
       return nextScores;
@@ -30,7 +29,6 @@ function App() {
 
   const handleBack = () => {
     if (step === 0) return;
-    // Optionally undo the last answer in scores
     const prevStep = step - 1;
     const prevType = answers[prevStep];
     if (prevType) {
@@ -84,46 +82,54 @@ function App() {
           <div className="w-full flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", alignItems: "center" }}>
-              {questions[step].options.map((opt) => (
+              {questions[step].options.map((opt) => {
+                const selected = answers[step] === opt.type;
+                return (
+                  <button
+                    key={opt.text}
+                    style={{
+                      width: "100%",
+                      maxWidth: "320px",
+                      padding: "12px 0",
+                      borderRadius: "14px",
+                      background: selected ? "#fff" : "#2563eb",
+                      color: selected ? "#2563eb" : "white",
+                      fontWeight: "bold",
+                      border: selected ? "3px solid #2563eb" : "none",
+                      boxShadow: "0 2px 8px rgba(37,99,235,0.09)",
+                      transition: "background 0.2s, border 0.2s, color 0.2s",
+                      fontSize: "1rem",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => handleAnswer(opt.type)}
+                  >
+                    {opt.text}
+                  </button>
+                );
+              })}
+
+              {/* Back Button Below Options and Styled To Match */}
+              {step > 0 && (
                 <button
-                  key={opt.text}
+                  onClick={handleBack}
                   style={{
                     width: "100%",
                     maxWidth: "320px",
                     padding: "12px 0",
                     borderRadius: "14px",
-                    background: answers[step] === opt.type ? "#1d4ed8" : "#2563eb",
+                    background: "#2563eb",
                     color: "white",
                     fontWeight: "bold",
-                    border: answers[step] === opt.type ? "3px solid #22d3ee" : "none",
+                    border: "none",
                     boxShadow: "0 2px 8px rgba(37,99,235,0.09)",
-                    transition: "background 0.2s, border 0.2s",
                     fontSize: "1rem",
-                    cursor: "pointer"
-                  }}
-                  onClick={() => handleAnswer(opt.type)}
-                >
-                  {opt.text}
+                    cursor: "pointer",
+                    marginTop: "16px"
+                  }}>
+                  ← Back
                 </button>
-              ))}
+              )}
             </div>
-
-            {/* Back Button Below Options */}
-            {step > 0 && (
-              <button
-                onClick={handleBack}
-                style={{
-                  marginTop: "32px",
-                  background: "transparent",
-                  color: "#2563eb",
-                  border: "none",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  cursor: "pointer"
-                }}>
-                ← Back
-              </button>
-            )}
 
             <div className="mt-6 text-gray-400 text-sm text-center">
               Question {step + 1} of {questions.length}
