@@ -9,28 +9,42 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
 
+  // Handle answer click, allow change anytime
   const handleAnswer = (type) => {
     const updatedAnswers = [...answers];
+    const prevType = answers[step];
     updatedAnswers[step] = type;
     setAnswers(updatedAnswers);
-    setScores((prev) => ({ ...prev, [type]: prev[type] + 1 }));
+
+    setScores((prev) => {
+      let nextScores = { ...prev };
+      // Remove prev score if changed
+      if (prevType && prevType !== type) nextScores[prevType]--;
+      nextScores[type]++;
+      return nextScores;
+    });
+
     if (step < questions.length - 1) setStep(step + 1);
     else setShowResult(true);
   };
 
   const handleBack = () => {
     if (step === 0) return;
-    const prevType = answers[step - 1];
+    // Optionally undo the last answer in scores
+    const prevStep = step - 1;
+    const prevType = answers[prevStep];
     if (prevType) {
       setScores((prev) => ({ ...prev, [prevType]: prev[prevType] - 1 }));
     }
-    setStep(step - 1);
+    setStep(prevStep);
   };
 
+  // Result calculation
   let resultKey = "balanced";
   if (scores.masculine > scores.feminine) resultKey = "masculine";
   else if (scores.feminine > scores.masculine) resultKey = "feminine";
 
+  // Social share
   const handleShare = () => {
     const shareText = `I got "${results[resultKey].title}": ${results[resultKey].message}`;
     if (navigator.share) {
@@ -58,6 +72,7 @@ function App() {
           ✨ Trait Analyzer ✨
         </h1>
         <p className="text-center text-gray-500 mb-5 text-base">Discover your core energy style.</p>
+        {/* Progress Bar */}
         <div className="w-full h-3 rounded bg-blue-100 mb-8 overflow-hidden">
           <div
             className="h-full bg-blue-400 transition-all duration-500"
@@ -67,22 +82,6 @@ function App() {
 
         {!showResult ? (
           <div className="w-full flex flex-col items-center">
-            {step > 0 && (
-              <button
-                onClick={handleBack}
-                style={{
-                  marginBottom: "18px",
-                  alignSelf: "flex-start",
-                  background: "transparent",
-                  color: "#2563eb",
-                  border: "none",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  cursor: "pointer"
-                }}>
-                ← Back
-              </button>
-            )}
             <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", alignItems: "center" }}>
               {questions[step].options.map((opt) => (
@@ -96,23 +95,42 @@ function App() {
                     background: answers[step] === opt.type ? "#1d4ed8" : "#2563eb",
                     color: "white",
                     fontWeight: "bold",
-                    border: answers[step] === opt.type ? "2px solid #22d3ee" : "none",
+                    border: answers[step] === opt.type ? "3px solid #22d3ee" : "none",
                     boxShadow: "0 2px 8px rgba(37,99,235,0.09)",
                     transition: "background 0.2s, border 0.2s",
                     fontSize: "1rem",
                     cursor: "pointer"
-                }}
-                onClick={() => handleAnswer(opt.type)}
-              >
-                {opt.text}
-              </button>
+                  }}
+                  onClick={() => handleAnswer(opt.type)}
+                >
+                  {opt.text}
+                </button>
               ))}
             </div>
+
+            {/* Back Button Below Options */}
+            {step > 0 && (
+              <button
+                onClick={handleBack}
+                style={{
+                  marginTop: "32px",
+                  background: "transparent",
+                  color: "#2563eb",
+                  border: "none",
+                  fontWeight: "bold",
+                  fontSize: "1rem",
+                  cursor: "pointer"
+                }}>
+                ← Back
+              </button>
+            )}
+
             <div className="mt-6 text-gray-400 text-sm text-center">
               Question {step + 1} of {questions.length}
             </div>
           </div>
         ) : (
+          // ---- RESULT CARD ----
           <div className="flex flex-col items-center w-full gap-5">
             <img
               src={results[resultKey].image}
