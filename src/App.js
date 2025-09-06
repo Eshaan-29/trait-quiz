@@ -43,7 +43,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-pink-100 via-indigo-100 to-cyan-100 flex items-center justify-center p-4">
-      <div className="max-w-xl w-full mx-auto bg-white/90 rounded-2xl shadow-xl p-6 flex flex-col items-center">
+      <div className="max-w-md w-full mx-auto bg-white/90 rounded-2xl shadow-xl p-6 flex flex-col items-center">
         <h1 className="font-extrabold text-3xl text-center mb-4 text-indigo-800 tracking-tight drop-shadow">
           ✨ Trait Analyzer ✨
         </h1>
@@ -60,11 +60,11 @@ function App() {
           // ---- QUESTION & OPTIONS PAGE ----
           <div className="w-full flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col gap-4 w-full items-center">
               {questions[step].options.map((opt) => (
                 <button
                   key={opt.text}
-                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow transition"
+                  className="w-full max-w-xs py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow transition"
                   onClick={() => handleAnswer(opt.type)}
                 >
                   {opt.text}
@@ -77,37 +77,29 @@ function App() {
           </div>
         ) : (
           // ---- RESULT CARD ----
-          <div className="flex flex-col items-center w-full gap-3">
+          <div className="flex flex-col items-center w-full gap-5">
             {/* Centered, contained image */}
-            <div className="w-full flex justify-center mb-2">
-              <img
-                src={results[resultKey].image}
-                alt={results[resultKey].title}
-                className="max-h-60 max-w-full object-contain rounded-xl shadow"
-                style={{ background: "#fff" }}
-              />
-            </div>
+            <img
+              src={results[resultKey].image}
+              alt={results[resultKey].title}
+              className="max-h-60 max-w-xs object-contain rounded-xl shadow bg-white mx-auto"
+              style={{ display: "block" }}
+            />
             <h2 className="text-2xl font-extrabold text-pink-700 text-center">{results[resultKey].title}</h2>
             <p className="text-center text-lg text-indigo-800 mb-2">{results[resultKey].message}</p>
-            <div className="flex flex-wrap gap-3 justify-center w-full mt-2">
+            <div className="flex flex-col gap-3 w-full items-center">
               <button
                 onClick={handleShare}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl shadow transition"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl shadow transition w-full max-w-xs"
               >
                 🚀 Share Your Result
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-xl shadow hover:bg-gray-200"
-              >
-                🔁 Retake Quiz
               </button>
               <a
                 href="https://www.buymeacoffee.com/Ashforyou"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center"
-                style={{ minWidth: "162px" }}
+                className="flex items-center justify-center w-full"
+                style={{ maxWidth: "162px" }}
               >
                 <img
                   src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
@@ -115,6 +107,12 @@ function App() {
                   style={{ height: "45px", width: "162px" }}
                 />
               </a>
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-xl shadow hover:bg-gray-200 w-full max-w-xs"
+              >
+                🔁 Retake Quiz
+              </button>
             </div>
           </div>
         )}
