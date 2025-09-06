@@ -9,7 +9,7 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
 
-  // Handle answer click, allow change anytime
+  // Handle answer selection: always decrement previous pick and increment new
   const handleAnswer = (type) => {
     const updatedAnswers = [...answers];
     const prevType = answers[step];
@@ -18,7 +18,7 @@ function App() {
 
     setScores((prev) => {
       let nextScores = { ...prev };
-      if (prevType && prevType !== type) nextScores[prevType]--;
+      if (prevType) nextScores[prevType]--;
       nextScores[type]++;
       return nextScores;
     });
@@ -27,17 +27,13 @@ function App() {
     else setShowResult(true);
   };
 
+  // Just move step back, never change scores or answers
   const handleBack = () => {
     if (step === 0) return;
-    const prevStep = step - 1;
-    const prevType = answers[prevStep];
-    if (prevType) {
-      setScores((prev) => ({ ...prev, [prevType]: prev[prevType] - 1 }));
-    }
-    setStep(prevStep);
+    setStep(step - 1);
   };
 
-  // Result calculation
+  // Determine result key
   let resultKey = "balanced";
   if (scores.masculine > scores.feminine) resultKey = "masculine";
   else if (scores.feminine > scores.masculine) resultKey = "feminine";
@@ -70,6 +66,7 @@ function App() {
           ✨ Trait Analyzer ✨
         </h1>
         <p className="text-center text-gray-500 mb-5 text-base">Discover your core energy style.</p>
+
         {/* Progress Bar */}
         <div className="w-full h-3 rounded bg-blue-100 mb-8 overflow-hidden">
           <div
@@ -108,7 +105,6 @@ function App() {
                 );
               })}
 
-              {/* Back Button Below Options and Styled To Match */}
               {step > 0 && (
                 <button
                   onClick={handleBack}
@@ -130,7 +126,6 @@ function App() {
                 </button>
               )}
             </div>
-
             <div className="mt-6 text-gray-400 text-sm text-center">
               Question {step + 1} of {questions.length}
             </div>
