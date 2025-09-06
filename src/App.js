@@ -60,12 +60,27 @@ function App() {
           // ---- QUESTION & OPTIONS PAGE ----
           <div className="w-full flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
-            <div className="flex flex-col gap-4 w-full items-center">
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", alignItems: "center" }}>
               {questions[step].options.map((opt) => (
                 <button
                   key={opt.text}
-                  className="w-full max-w-xs py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow transition"
+                  style={{
+                    width: "100%",
+                    maxWidth: "320px",
+                    padding: "12px 0",
+                    borderRadius: "14px",
+                    background: "#2563eb",
+                    color: "white",
+                    fontWeight: "bold",
+                    boxShadow: "0 2px 8px rgba(37,99,235,0.09)",
+                    transition: "background 0.2s",
+                    border: "none",
+                    fontSize: "1rem",
+                    cursor: "pointer"
+                  }}
                   onClick={() => handleAnswer(opt.type)}
+                  onMouseOver={e => e.currentTarget.style.background = "#1d4ed8"}
+                  onMouseOut={e => e.currentTarget.style.background = "#2563eb"}
                 >
                   {opt.text}
                 </button>
