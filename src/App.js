@@ -43,62 +43,71 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-pink-100 via-indigo-100 to-cyan-100 flex items-center justify-center p-4">
-      <div className="card max-w-lg w-full mx-auto">
+      <div className="max-w-xl w-full mx-auto bg-white/90 rounded-2xl shadow-xl p-6 flex flex-col items-center">
         <h1 className="font-extrabold text-3xl text-center mb-4 text-indigo-800 tracking-tight drop-shadow">
           ✨ Trait Analyzer ✨
         </h1>
         <p className="text-center text-gray-500 mb-5 text-base">Discover your core energy style.</p>
         {/* Progress Bar */}
-        <div className="progress mb-8">
-          <div className="bar" style={{ width: `${progress}%` }} />
+        <div className="w-full h-3 rounded bg-blue-100 mb-8 overflow-hidden">
+          <div
+            className="h-full bg-blue-400 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
         {!showResult ? (
-          <>
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
-              <div className="choices w-full flex flex-col gap-4">
-                {questions[step].options.map((opt) => (
-                  <button
-                    key={opt.text}
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow transition"
-                    onClick={() => handleAnswer(opt.type)}
-                  >
-                    {opt.text}
-                  </button>
-                ))}
-              </div>
+          // ---- QUESTION & OPTIONS PAGE ----
+          <div className="w-full flex flex-col items-center">
+            <h2 className="text-2xl font-bold mb-6 text-center">{questions[step].question}</h2>
+            <div className="flex flex-col gap-4 w-full">
+              {questions[step].options.map((opt) => (
+                <button
+                  key={opt.text}
+                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow transition"
+                  onClick={() => handleAnswer(opt.type)}
+                >
+                  {opt.text}
+                </button>
+              ))}
             </div>
-            <div className="mt-6 muted small text-center">
+            <div className="mt-6 text-gray-400 text-sm text-center">
               Question {step + 1} of {questions.length}
             </div>
-          </>
+          </div>
         ) : (
-          <>
-            {/* Results Display */}
-            <div className="flex flex-col items-center gap-1 mb-3">
-              <div className="w-24 h-24 bg-gradient-to-br from-pink-300 via-indigo-200 to-cyan-200 rounded-full shadow-xl flex items-center justify-center mb-2 overflow-hidden">
-                <img
-                  src={results[resultKey].image}
-                  alt={results[resultKey].title}
-                  className="w-20 h-20 object-cover rounded-full"
-                  style={{ background: "#fff" }}
-                />
-              </div>
-              <h2 className="text-2xl font-extrabold text-pink-700 mb-1">{results[resultKey].title}</h2>
-              <p className="text-center text-lg text-indigo-800 mb-2">{results[resultKey].message}</p>
+          // ---- RESULT CARD ----
+          <div className="flex flex-col items-center w-full gap-3">
+            {/* Centered, contained image */}
+            <div className="w-full flex justify-center mb-2">
+              <img
+                src={results[resultKey].image}
+                alt={results[resultKey].title}
+                className="max-h-60 max-w-full object-contain rounded-xl shadow"
+                style={{ background: "#fff" }}
+              />
+            </div>
+            <h2 className="text-2xl font-extrabold text-pink-700 text-center">{results[resultKey].title}</h2>
+            <p className="text-center text-lg text-indigo-800 mb-2">{results[resultKey].message}</p>
+            <div className="flex flex-wrap gap-3 justify-center w-full mt-2">
               <button
                 onClick={handleShare}
-                className="button secondary my-2"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl shadow transition"
               >
                 🚀 Share Your Result
               </button>
-              {/* Buy Me a Coffee integration */}
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-xl shadow hover:bg-gray-200"
+              >
+                🔁 Retake Quiz
+              </button>
               <a
                 href="https://www.buymeacoffee.com/Ashforyou"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block my-3"
+                className="flex items-center justify-center"
+                style={{ minWidth: "162px" }}
               >
                 <img
                   src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
@@ -106,14 +115,8 @@ function App() {
                   style={{ height: "45px", width: "162px" }}
                 />
               </a>
-              <button
-                onClick={() => window.location.reload()}
-                className="button ghost small"
-              >
-                🔁 Retake Quiz
-              </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
