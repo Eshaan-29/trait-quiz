@@ -3,40 +3,39 @@ import React, { useState } from "react";
 import { questions } from "./questions";
 import { results } from "./results";
 
+function calcScores(answers) {
+  const counts = { masculine: 0, feminine: 0 };
+  answers.forEach(ans => {
+    if (ans === "masculine") counts.masculine++;
+    if (ans === "feminine") counts.feminine++;
+  });
+  return counts;
+}
+
 function App() {
   const [step, setStep] = useState(0);
-  const [scores, setScores] = useState({ masculine: 0, feminine: 0 });
   const [showResult, setShowResult] = useState(false);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
 
-  // Handle answer selection: always decrement previous pick and increment new
   const handleAnswer = (type) => {
     const updatedAnswers = [...answers];
-    const prevType = answers[step];
     updatedAnswers[step] = type;
     setAnswers(updatedAnswers);
-
-    setScores((prev) => {
-      let nextScores = { ...prev };
-      if (prevType) nextScores[prevType]--;
-      nextScores[type]++;
-      return nextScores;
-    });
 
     if (step < questions.length - 1) setStep(step + 1);
     else setShowResult(true);
   };
 
-  // Just move step back, never change scores or answers
   const handleBack = () => {
     if (step === 0) return;
     setStep(step - 1);
   };
 
-  // Determine result key
+  // Scores tally, always from answers
+  const tallied = calcScores(answers);
   let resultKey = "balanced";
-  if (scores.masculine > scores.feminine) resultKey = "masculine";
-  else if (scores.feminine > scores.masculine) resultKey = "feminine";
+  if (tallied.masculine > tallied.feminine) resultKey = "masculine";
+  else if (tallied.feminine > tallied.masculine) resultKey = "feminine";
 
   // Social share
   const handleShare = () => {
